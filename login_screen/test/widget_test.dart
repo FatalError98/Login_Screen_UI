@@ -1,30 +1,29 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:simple_animations/simple_animations.dart';
 
-import 'package:login_screen/main.dart';
+void main() =>
+    runApp(const MaterialApp(home: Scaffold(body: Center(child: Page()))));
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+class Page extends StatelessWidget {
+  const Page({Key? key}) : super(key: key);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  @override
+  Widget build(BuildContext context) {
+    return MirrorAnimation<double>(
+      tween: Tween(begin: -100.0, end: 100.0), // value for offset x-coordinate
+      duration: const Duration(seconds: 2),
+      curve: Curves.easeInOutSine, // non-linear animation
+      builder: (context, child, value) {
+        return Transform.translate(
+          offset: Offset(value, 0), // use animated value for x-coordinate
+          child: child,
+        );
+      },
+      child: Container(
+        width: 100,
+        height: 100,
+        color: Colors.green,
+      ),
+    );
+  }
 }
